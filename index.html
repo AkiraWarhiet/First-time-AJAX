@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Movies</h1>
+    <div id="movieTitle"></div>
+    <p id="desc"></p>
+    <div id="nowPlaying"></div>
+    <script>
+    //read notes up to line 72 in js file before this
+        var httpRequest = new XMLHttpRequest()
+        //creating new instance of object
+        httpRequest.open("get", "https://api.themoviedb.org/3/movie/now_playing?api_key=3e10d7f3f79c11b4421becd92e8b722f&language=en-US&page=1")
+        //our link with our specific key
+        httpRequest.send(null)
+        //sends the request
+        //okay so up to here nothing happened but if you go
+        //into the inspect menu > network, you can see that
+        //it actually did get it, we are just doing nothing
+        //with it yet
+        httpRequest.onreadystatechange = aFunction;
+        //you can look at W3Schools for AJAX readystates
+        function aFunction(){
+            //4 just means ready and 200 also means ready
+            if(httpRequest.readyState == 4 && httpRequest.status == 200){
+                var movies = httpRequest.responseText
+                //gets that text back
+                //console.log(movies)
+                //BOOM THIS IS WHEN WE TURN IT BACK INTO AN OBJECT
+                var jsObject = JSON.parse(movies)
+                console.log(jsObject)
+                //this object is our array of movies we got from the DB
+                console.log(jsObject.results[0].title)
+                console.log(jsObject.results[0].overview)
+                //so this is how we get the stuff from each movie
+
+                console.log(jsObject.results.length)
+                //gets how long the results array is
+                for (var i = 0; i < jsObject.results.length; i++){
+                    console.log(jsObject.results[i].title)
+                    //so for each movie we are going to create <div><section>
+                    //<h1>(title)</h1><p>(overview)</p></section></div>
+                    var sec = document.createElement('SECTION')
+                    var title = document.createElement('H1')
+                    var desc = document.createElement('P')
+                    desc.innerHTML = jsObject.results[i].overview
+                    title.innerHTML = jsObject.results[i].title
+                    sec.appendChild(title)
+                    sec.appendChild(desc)
+                    document.getElementById('nowPlaying').appendChild(sec)
+                    //just text me if you have any questions bro
+                }
+            }
+        }
+    </script>
+    <script src="scripts.js"></script>
+</body>
+</html>
